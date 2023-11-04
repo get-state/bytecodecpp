@@ -14,13 +14,14 @@ void disassembleChunk(Chunk &chunk, std::string_view const &name) {
   return;
 }
 
-static int constantInstruction(std::string_view name, Chunk& chunk,  size_t offset) {
-	uint8_t constant = chunk.getAtOffset(offset + 1);
-	/* printf("%-16s %4d '", name, constant); */
-	std::cout << name << " " << constant;
-	printValue(chunk.getConstantValue(constant));
-	printf("\n");
-	return offset +2;
+static int constantInstruction(std::string_view name, Chunk &chunk,
+                               size_t offset) {
+  uint8_t constant = chunk.getAtOffset(offset + 1);
+  /* printf("%-16s %4d '", name, constant); */
+  std::cout << name << " " << constant;
+  printValue(chunk.getConstantValue(constant));
+  printf("\n");
+  return offset + 2;
 }
 
 static int simpleInstruction(std::string_view name, size_t offset) {
@@ -28,8 +29,14 @@ static int simpleInstruction(std::string_view name, size_t offset) {
   return offset + 1;
 }
 
-int disassembleInstruction(Chunk& chunk, size_t offset) {
+int disassembleInstruction(Chunk &chunk, size_t offset) {
   printf("%04zu ", offset);
+
+  if (offset > 0 && chunk.getLine(offset) == chunk.getLine(offset - 1)) {
+    printf("   | ");
+  } else {
+    printf("%4d ", chunk.getLine(offset));
+  }
 
   uint8_t instruction = chunk.getAtOffset(offset);
   switch (instruction) {

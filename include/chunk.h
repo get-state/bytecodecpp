@@ -1,7 +1,6 @@
 #ifndef clox_chunk_h
 #define clox_chunk_h 
 
-#include "common.h"
 #include "value.h"
 #include <cstdint>
 #include <vector>
@@ -18,8 +17,9 @@ public:
 	/* 	this->v = {}; */
 	/* } */
 
-	void writeChunk(uint8_t byte){
+	void writeChunk(uint8_t byte, int line){
 		this->v.push_back(byte);
+		this->lines.push_back(line);
 		this->count = v.size();
 	}
 
@@ -37,18 +37,27 @@ public:
 		return this->count;
 	}
 	 
+	// returns a chunk at the specified offset
 	size_t getAtOffset(size_t offset){
 		return this->v[offset];
 	}
 	
-	Value getConstantValue(uint8_t constant){
-		return constants.at(constant);
+	// returns a constant at the specified offset
+	Value getConstantValue(uint8_t offset){
+		return constants.at(offset);
 	}
 
+	// returns the line number at specific offset
+	int getLine(uint8_t offset){
+		return lines.at(offset);
+	}
+	
 private:
+	//stores chunks
 	std::vector<std::uint8_t> v;
 	size_t count;
 	ValueArray constants;
+	std::vector<int> lines;
 	/* data */
 };
 #endif /* ifndef clox_chunk_h */

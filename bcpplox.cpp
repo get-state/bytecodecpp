@@ -1,5 +1,3 @@
-#include <iostream>
-#include "include/common.h"
 #include "chunk.h"
 #include "debug.h"
 
@@ -8,9 +6,9 @@
 int main(int argc, char **argv) {
 	Chunk chunk;
 	int constant = chunk.addConstant(1.2);
-	chunk.writeChunk(OP_CONSTANT);
-	chunk.writeChunk(constant);
-	chunk.writeChunk(OP_RETURN);
+	chunk.writeChunk(OP_CONSTANT, 123);
+	chunk.writeChunk(constant, 123);
+	chunk.writeChunk(OP_RETURN, 123);
 	std::string_view t = "test chunk";
 	disassembleChunk(chunk, t);
 	chunk.freeChunk();
