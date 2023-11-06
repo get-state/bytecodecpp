@@ -13,7 +13,7 @@ typedef enum {
 
 class VM {
 public:
-  VM();
+  /* VM(); */
 
   InterpretResult run();
 

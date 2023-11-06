@@ -1,9 +1,8 @@
-value_sources = ['value.cpp'] valuelib =
-    shared_library('value', value_sources, include_directories
-                   : incdir)
+value_sources = ['value.cpp']
+valuelib = shared_library('value', value_sources, include_directories: incdir)
 
-        debug_sources = ['debug.cpp'] debuglib =
-            shared_library('debug', debug_sources, include_directories
-                           : incdir, link_with
-                           : valuelib, install
-                           : true)
+debug_sources = ['debug.cpp']
+debuglib = shared_library('debug', debug_sources, include_directories: incdir, link_with: valuelib, install: true)
+
+vm_sources = ['vm.cpp']
+vmlib = shared_library('vm', vm_sources, include_directories: incdir, link_with: valuelib, install: true)
