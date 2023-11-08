@@ -8,14 +8,13 @@ InterpretResult VM::run() {
 
   for (;;) {
    #ifdef DEBUG_TRACE_HIGHLIGHTING
-   	#define 
+   	disassembleInstruction(this->chunk, (int) this->ip - vm.chunk.getAtOffset(0)) 
    #endif
     uint8_t instruction;
     switch (instruction = this->chunk.getAtOffset(this->ip)) {
     case OP_CONSTANT: {
       Value constant = READ_CONSTANT();
       printValue(constant);
-      printf("\n");
       break;
     }
     case OP_RETURN: {

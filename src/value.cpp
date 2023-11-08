@@ -1,4 +1,4 @@
 #include "value.h"
-#include <cstdio>
+#include <iostream>
 
-void printValue(Value value) { printf("%g", value); }
+void printValue(Value value) {std::cout << value << std::endl;}

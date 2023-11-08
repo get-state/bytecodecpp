@@ -2,8 +2,6 @@
 #define clox_vm_h
 
 #include "chunk.h"
-#include <cstdint>
-#include <memory>
 
 typedef enum {
   INTERPRET_OK,
