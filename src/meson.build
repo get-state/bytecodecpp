@@ -5,4 +5,4 @@ debug_sources = ['debug.cpp']
 debuglib = shared_library('debug', debug_sources, include_directories: incdir, link_with: valuelib, install: true)
 
 vm_sources = ['vm.cpp']
-vmlib = shared_library('vm', vm_sources, include_directories: incdir, link_with: valuelib, install: true)
+vmlib = shared_library('vm', vm_sources, include_directories: incdir, link_with: [valuelib, debuglib], install: true)

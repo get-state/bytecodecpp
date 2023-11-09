@@ -19,6 +19,7 @@ static int constantInstruction(std::string_view name, Chunk &chunk,
   uint8_t constant = chunk.getAtOffset(offset + 1);
   std::cout << name << " " << constant;
   printValue(chunk.getConstantValue(constant));
+  std::cout << std::endl;
   return offset + 2;
 }
 
@@ -42,6 +43,8 @@ int disassembleInstruction(Chunk &chunk, size_t offset) {
     return simpleInstruction("OP_RETURN", offset);
   case OP_CONSTANT:
     return constantInstruction("OP_CONSTANT", chunk, offset);
+   case OP_NEGATE:
+    return simpleInstruction("OP_NEGATE", offset);
   default:
     std::cout << "unknown opcode " << instruction << std::endl;
   }

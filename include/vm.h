@@ -2,6 +2,7 @@
 #define clox_vm_h
 
 #include "chunk.h"
+#include <stack>
 
 typedef enum {
   INTERPRET_OK,
@@ -17,10 +18,21 @@ public:
 
   InterpretResult interpret(Chunk &chunk);
 
+  std::stack<Value> getStack() { return this->stack; }
+
+  void push(Value constant) { this->stack.push(constant); }
+
+  Value pop() {
+    Value tmp = this->stack.top();
+    this->stack.pop();
+    return tmp;
+  }
+
 private:
   Chunk chunk;
   size_t ip; // instruction pointer
-             /* data */
+  std::stack<Value> stack;
+  /* data */
 };
 
 #endif // ifndef clox_vm_h
