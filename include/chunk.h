@@ -10,7 +10,7 @@ typedef enum {
   OP_NEGATE,
   OP_ADD,
   OP_SUBTRACT,
-  OP_MUTIPLY,
+  OP_MULTIPLY,
   OP_DIVIDE,
   OP_RETURN,
 } OpCode;
@@ -50,7 +50,7 @@ public:
 
 private:
   // stores chunks
-  std::vector<std::uint8_t> v;
+  std::vector<std::uint8_t> v = {};
   size_t count;
   ValueArray constants;
   std::vector<int> lines;

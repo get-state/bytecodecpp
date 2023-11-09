@@ -9,7 +9,7 @@ void printValue(Value value);
 
 class ValueArray {
 public:
-  Value at(int index) { return this->values[index]; }
+  Value at(int index) { return this->values.at(index); }
 
   void push_back(Value v) { this->values.push_back(v); }
 

@@ -31,7 +31,7 @@ public:
 private:
   Chunk chunk;
   size_t ip; // instruction pointer
-  std::stack<Value> stack;
+  std::stack<Value> stack = {};
   /* data */
 };
 
