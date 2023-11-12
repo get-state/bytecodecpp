@@ -1,6 +1,9 @@
 #include "scanner.h"
+#include <cctype>
 
-Scanner::Scanner(std::string_view const &source) : source{source} {}
+Scanner::Scanner(std::string_view const source) : source{source} {
+
+}
 
 bool Scanner::isAtEnd() { return this->source[current] == '\0'; }
 
@@ -12,8 +15,9 @@ char Scanner::advance() {
 char Scanner::peek() { return this->source[current]; }
 
 char Scanner::peekNext() {
-	if (isAtEnd()) return '\0';	
-	return this->source[current+1]; 
+  if (isAtEnd())
+    return '\0';
+  return this->source[current + 1];
 }
 
 bool Scanner::match(char expected) {
@@ -43,7 +47,7 @@ Token Scanner::errorToken(std::string const &message) {
 
 void Scanner::skipWhitespace() {
   for (;;) {
-    char c = peek();
+    const char c = peek();
     if (isspace(c)) {
       if (c == '\n')
         ++this->line;
@@ -59,6 +63,86 @@ void Scanner::skipWhitespace() {
   }
 }
 
+TokenType Scanner::checkKeyword(size_t start, size_t length,
+                                std::string_view rest, TokenType type) {
+  auto tmp = this->source.substr(this->start + start, length);
+  if (this->current - this->start == start + length && tmp == rest) {
+    return type;
+  }
+  return TokenType::IDENTIFIER;
+}
+
+TokenType Scanner::identifierType() {
+  switch (this->source[this->start]) {
+  case 'a':
+    return checkKeyword(1, 2, "nd", TokenType::AND);
+  case 'c':
+    return checkKeyword(1, 4, "class", TokenType::CLASS);
+  case 'e':
+    return checkKeyword(1, 3, "lse", TokenType::ELSE);
+  case 'f':
+    if (this->current - this->start > 1) {
+	    switch (this->source[this->start+1]){
+		    case 'a' : return checkKeyword(2,3,"lse", TokenType::FALSE);
+		    case 'o' : return checkKeyword(2,1,"r", TokenType::FOR);
+		    case 'u' : return checkKeyword(2,1,"n", TokenType::FUN);
+	    }
+    }
+    break;
+  case 'i':
+    return checkKeyword(1, 1, "f", TokenType::IF);
+  case 'n':
+    return checkKeyword(1, 2, "il", TokenType::NIL);
+  case 'o':
+    return checkKeyword(1, 1, "r", TokenType::OR);
+  case 'p':
+    return checkKeyword(1, 4, "rint", TokenType::PRINT);
+  case 'r':
+    return checkKeyword(1, 5, "eturn", TokenType::RETURN);
+  case 's':
+    return checkKeyword(1, 4, "uper", TokenType::SUPER);
+  case 'v':
+    return checkKeyword(1, 2, "ar", TokenType::VAR);
+  case 'w':
+    return checkKeyword(1, 4, "hile", TokenType::WHILE);
+  }
+  return TokenType::IDENTIFIER;
+}
+
+Token Scanner::number() {
+  while (isdigit(peek()))
+    advance();
+
+  if (peek() == '.' && isdigit(peekNext())) {
+    advance();
+
+    while (isdigit(peek()))
+      advance();
+  }
+
+  return makeToken(TokenType::NUMBER);
+}
+
+Token Scanner::identifier() {
+  while (isalpha(peek()) || isdigit(peek()))
+    advance();
+  return makeToken(identifierType());
+}
+
+Token Scanner::string() {
+  while (peek() != '"' && !isAtEnd()) {
+    if (peek() == '\n')
+      ++this->line;
+    advance();
+  }
+  if (isAtEnd())
+    return errorToken("Unterminated string.");
+
+  // closing quote.
+  advance();
+  return makeToken(TokenType::STRING);
+}
+
 Token Scanner::scanToken() {
   this->skipWhitespace();
   this->start = this->current;
@@ -66,7 +150,14 @@ Token Scanner::scanToken() {
   if (isAtEnd())
     return makeToken(TokenType::EoF);
 
-  char c = advance();
+  const char c = advance();
+
+  if (isalpha(c)) {
+    return identifier();
+  }
+
+  if (isdigit(c))
+    return number();
 
   switch (c) {
   case '(':
@@ -100,6 +191,8 @@ Token Scanner::scanToken() {
   case '>':
     return makeToken(match('=') ? TokenType::GREATER_EQUAL
                                 : TokenType::GREATER);
+  case '"':
+    return string();
   }
 
   return errorToken("Unexpected Character.");

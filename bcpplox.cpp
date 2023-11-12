@@ -24,7 +24,7 @@ static void repl() {
 
 static void runFile(std::filesystem::path path) {
   auto fStream = std::ifstream(path);
-  if (fStream.failbit) {
+  if (fStream.fail()) {
     std::cerr << "Could not open file" << std::endl;
     exit(74);
   }
@@ -34,7 +34,7 @@ static void runFile(std::filesystem::path path) {
     std::stringstream ss;
     ss << fStream.rdbuf();
     source = ss.str();
-  } catch (std::bad_alloc) {
+  } catch (std::bad_alloc const &) {
     std::cerr << "Out of memory!" << std::endl;
     exit(74);
   }

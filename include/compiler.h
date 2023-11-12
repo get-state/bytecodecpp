@@ -5,7 +5,7 @@
 class Compiler {
 public:
   Compiler() = delete;
-  explicit Compiler(std::string const &source);
+  explicit Compiler(std::string const& source);
 
 private:
   /* data */

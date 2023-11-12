@@ -61,29 +61,39 @@ typedef struct {
 class Scanner {
 public:
   Scanner() = delete;
-  explicit Scanner(std::string_view const& source);
+  explicit Scanner(std::string_view const source);
 
   Token scanToken();
 
   bool isAtEnd();
 
   Token makeToken(TokenType type);
-  
-  Token errorToken(std::string const& message);
-  
+
+  Token errorToken(std::string const &message);
+
+  Token string();
+
   char advance();
-  
+
   char peek();
 
   char peekNext();
-  
+
   void skipWhitespace();
+
+  Token number();
+
+  Token identifier();
+
+  TokenType identifierType();
   
+  TokenType checkKeyword(size_t start, size_t length, std::string_view rest, TokenType type);
+
   bool match(char expected);
 
 private:
   /* data */
-  std::string_view const &source;
+  std::string_view const source;
   std::string_view currentToken;
   size_t start = 0;
   size_t current = 0;

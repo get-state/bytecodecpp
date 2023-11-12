@@ -8,7 +8,7 @@ incdir = include_directories('include')
 
 subdir('src')
 
-libs = [debuglib, valuelib, vmlib]
+libs = [debuglib, valuelib, vmlib, scannerlib, compilerlib]
 exe = executable('bcpplox', 'bcpplox.cpp', include_directories : incdir, link_with : libs,
   install : true)
 

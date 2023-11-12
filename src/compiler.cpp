@@ -16,7 +16,7 @@ Compiler::Compiler(std::string const &source) {
     std::cout << static_cast<int>(token.type) << " '" << token.token << "'"
               << std::endl;
 
-    if (token.type == TOKEN_EOF)
+    if (token.type == TokenType::EoF)
       break;
   }
 }

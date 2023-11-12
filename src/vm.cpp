@@ -5,6 +5,7 @@
 #include "debug.h"
 #include "value.h"
 #include <iostream>
+#include <string>
 
 InterpretResult VM::run() {
 
@@ -68,7 +69,7 @@ InterpretResult VM::run() {
 #undef BINARY_OP
 }
 
-InterpretResult VM::interpret(std::string const &source) {
+InterpretResult VM::interpret(std::string const& source) {
   Compiler compile(source);
   return INTERPRET_OK;
 }
