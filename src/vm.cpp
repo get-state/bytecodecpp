@@ -1,6 +1,7 @@
 #include "vm.h"
 #include "chunk.h"
 #include "common.h"
+#include "compiler.h"
 #include "debug.h"
 #include "value.h"
 #include <iostream>
@@ -8,8 +9,9 @@
 InterpretResult VM::run() {
 
 #define READ_CONSTANT()                                                        \
-  (this->chunk.getConstantValue(this->chunk.getAtOffset(this->ip++))) // reads one byte ahead.
-                                                                     //
+  (this->chunk.getConstantValue(                                               \
+      this->chunk.getAtOffset(this->ip++))) // reads one byte ahead.
+                                            //
 #define BINARY_OP(op)                                                          \
   do {                                                                         \
     double b = this->pop();                                                    \
@@ -66,8 +68,7 @@ InterpretResult VM::run() {
 #undef BINARY_OP
 }
 
-InterpretResult VM::interpret(Chunk &chunk) {
-  this->chunk = chunk;
-  this->ip = 0; // sets index to 0 before interpreting.
-  return VM::run();
+InterpretResult VM::interpret(std::string const &source) {
+  Compiler compile(source);
+  return INTERPRET_OK;
 }

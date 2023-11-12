@@ -3,6 +3,7 @@
 
 #include "chunk.h"
 #include <stack>
+#include <string>
 
 typedef enum {
   INTERPRET_OK,
@@ -16,7 +17,7 @@ public:
 
   InterpretResult run();
 
-  InterpretResult interpret(Chunk &chunk);
+  InterpretResult interpret(std::string const& source);
 
   std::stack<Value> getStack() { return this->stack; }
 
