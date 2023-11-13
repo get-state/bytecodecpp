@@ -24,7 +24,7 @@ static void repl() {
 
 static void runFile(std::filesystem::path path) {
   auto fStream = std::ifstream(path);
-  if (fStream.fail()) {
+  if (fStream.bad() || fStream.fail()) {
     std::cerr << "Could not open file" << std::endl;
     exit(74);
   }

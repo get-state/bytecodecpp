@@ -70,6 +70,16 @@ InterpretResult VM::run() {
 }
 
 InterpretResult VM::interpret(std::string const& source) {
-  Compiler compile(source);
-  return INTERPRET_OK;
+	Chunk chunk;
+	Compiler compile(source, chunk);
+	if (!compile.isOk()){
+		return INTERPRET_COMPILE_ERROR;
+	}
+
+	this->chunk = chunk;
+	this->ip = 0;
+
+	InterpretResult res = run();
+
+	return res;
 }

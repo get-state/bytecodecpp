@@ -20,3 +20,11 @@ Compiler::Compiler(std::string const &source) {
       break;
   }
 }
+
+
+Compiler::Compiler(std::string const &source, Chunk chunk) {
+	Scanner scanner(source);
+	this->advance();
+	scanner.expression();
+	consume(TOKEN_EOF, "Expected end of expression.");
+}
