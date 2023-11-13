@@ -1,10 +1,12 @@
 #include "vm.h"
+
 #include "chunk.h"
 #include "common.h"
 #include "compiler.h"
 #include "debug.h"
 #include "value.h"
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 InterpretResult VM::run() {
@@ -69,17 +71,17 @@ InterpretResult VM::run() {
 #undef BINARY_OP
 }
 
-InterpretResult VM::interpret(std::string const& source) {
-	Chunk chunk;
-	Compiler compile(source, chunk);
-	if (!compile.isOk()){
-		return INTERPRET_COMPILE_ERROR;
-	}
+InterpretResult VM::interpret(std::string const &source) {
+  Chunk chunk;
+  try {
+    Compiler compile(source, chunk);
+  } catch (std::logic_error const &) { // TODO: make own error class.
+    return INTERPRET_COMPILE_ERROR;
+  }
+  this->chunk = chunk;
+  this->ip = 0;
 
-	this->chunk = chunk;
-	this->ip = 0;
+  InterpretResult res = run();
 
-	InterpretResult res = run();
-
-	return res;
+  return res;
 }

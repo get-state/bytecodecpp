@@ -15,9 +15,16 @@ class VM {
 public:
   /* VM(); */
 
-  InterpretResult run();
+  InterpretResult interpret(std::string const &source);
 
-  InterpretResult interpret(std::string const& source);
+private:
+  /* data */
+  Chunk chunk;
+  size_t ip; // instruction pointer
+  std::stack<Value> stack = {};
+
+  /* methods */
+  [[nodiscard]] InterpretResult run();
 
   std::stack<Value> getStack() { return this->stack; }
 
@@ -28,12 +35,6 @@ public:
     this->stack.pop();
     return tmp;
   }
-
-private:
-  Chunk chunk;
-  size_t ip; // instruction pointer
-  std::stack<Value> stack = {};
-  /* data */
 };
 
 #endif // ifndef clox_vm_h

@@ -65,39 +65,41 @@ public:
 
   Token scanToken();
 
-  bool isAtEnd();
-
-  Token makeToken(TokenType type);
-
-  Token errorToken(std::string const &message);
-
-  Token string();
-
-  char advance();
-
-  char peek();
-
-  char peekNext();
-
-  void skipWhitespace();
-
-  Token number();
-
-  Token identifier();
-
-  TokenType identifierType();
-  
-  TokenType checkKeyword(size_t start, size_t length, std::string_view rest, TokenType type);
-
-  bool match(char expected);
-
 private:
   /* data */
   std::string_view const source;
   std::string_view currentToken;
-  size_t start = 0;
-  size_t current = 0;
-  size_t line = 1;
+  size_t start{0};
+  size_t current{0};
+  size_t line{1};
+
+  /* methods */
+  [[nodiscard]] bool isAtEnd();
+
+  [[nodiscard]] Token makeToken(TokenType type);
+
+  [[nodiscard]] Token errorToken(std::string const &message);
+
+  [[nodiscard]] Token string();
+
+  char advance();
+
+  [[nodiscard]] char peek();
+
+  [[nodiscard]] char peekNext();
+
+  void skipWhitespace();
+
+  [[nodiscard]] Token number();
+
+  [[nodiscard]] Token identifier();
+
+  [[nodiscard]] TokenType identifierType();
+
+  TokenType checkKeyword(size_t start, size_t length, std::string_view rest,
+                         TokenType type);
+
+  [[nodiscard]] bool match(char expected);
 };
 
 #endif /* ifndef clox_scanner_h */

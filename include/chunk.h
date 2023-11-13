@@ -27,33 +27,28 @@ public:
     this->count = v.size();
   }
 
-  int addConstant(Value value) {
+  [[nodiscard]] int addConstant(Value const value) {
     constants.push_back(value);
     return constants.size() - 1;
   }
 
-  void freeChunk() {
-    this->v = {};
-    this->count = v.size();
-  }
-
-  size_t getCount() { return this->count; }
+  [[nodiscard]] size_t getCount() const { return this->count; } 
 
   // returns a chunk at the specified offset
-  size_t getAtOffset(size_t offset) { return this->v[offset]; }
+  [[nodiscard]] size_t getAtOffset(size_t offset) const { return this->v[offset]; }
 
   // returns a constant at the specified offset
-  Value getConstantValue(uint8_t offset) { return constants.at(offset); }
+  [[nodiscard]] Value getConstantValue(uint8_t offset) { return constants.at(offset); }
 
   // returns the line number at specific offset
-  int getLine(uint8_t offset) { return lines.at(offset); }
+  [[nodiscard]] int getLine(uint8_t offset) { return lines.at(offset); }
 
 private:
   // stores chunks
-  std::vector<std::uint8_t> v = {};
-  size_t count;
-  ValueArray constants;
-  std::vector<int> lines;
+  std::vector<std::uint8_t> v {};
+  size_t count {0};
+  ValueArray constants {};
+  std::vector<int> lines {};
   /* data */
 };
 #endif /* ifndef clox_chunk_h */

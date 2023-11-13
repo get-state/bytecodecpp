@@ -9,11 +9,11 @@ void printValue(Value value);
 
 class ValueArray {
 public:
-  Value at(int index) { return this->values.at(index); }
+  [[nodiscard]] Value at(int index) { return this->values.at(index); }
 
   void push_back(Value v) { this->values.push_back(v); }
 
-  int size() { return this->values.size(); }
+  [[nodiscard]] int size() { return this->values.size(); }
 
 private:
   std::vector<Value> values = {};
