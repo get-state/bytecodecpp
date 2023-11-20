@@ -1,9 +1,13 @@
 #include "scanner.h"
 #include <cctype>
+#include <iostream>
 
-/* Scanner::Scanner(std::string_view const source) : source{source} { */
+Scanner::Scanner(std::string_view const source) : source{source} {
 
-/* } */
+}
+
+Scanner::Scanner(std::string const source) : source{source} {
+}
 
 bool Scanner::isAtEnd() { return this->source[current] == '\0'; }
 

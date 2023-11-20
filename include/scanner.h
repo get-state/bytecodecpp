@@ -1,5 +1,10 @@
+#include "common.h"
 #ifndef clox_scanner_h
 #define clox_scanner_h
+
+#ifdef DEBUG_PRINT_CODE
+#include "debug.h"
+#endif
 
 #include <string>
 #include <string_view>
@@ -52,6 +57,11 @@ enum class TokenType {
   EoF
 };
 
+// returns the total amount of TokenTypes in the enum class.
+constexpr int TokenTypeCardinality(){
+	return static_cast<int>(TokenType::EoF) + 1;
+}
+
 typedef struct {
   TokenType type;
   std::string_view token;
@@ -62,6 +72,7 @@ class Scanner {
 public:
   Scanner() = delete;
   explicit Scanner(std::string_view const source);
+  explicit Scanner(std::string const source);
 
   Token scanToken();
 
