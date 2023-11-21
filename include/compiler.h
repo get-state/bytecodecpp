@@ -70,9 +70,9 @@ private:
   typedef void (Compiler::*ParseFn)();
 
   struct ParseRule {
-    ParseFn prefix;
-    ParseFn infix;
-    Precedence precedence;
+    ParseFn prefix = NULL;
+    ParseFn infix = NULL;
+    Precedence precedence = Precedence::NONE;
   };
 
   void advance();
@@ -103,11 +103,14 @@ private:
 
   void unary();
 
+  void literal();
+
   void parsePrecedence(Precedence precedence);
 
   void binary();
 
-  std::array<ParseRule, TokenTypeCardinality()> buildParseTable();
+
+std::array<ParseRule, TokenTypeCardinality()> buildParseTable();
 
   ParseRule getRule(TokenType type);
 

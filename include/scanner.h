@@ -52,7 +52,7 @@ enum class TokenType {
   TRUE,
   VAR,
   WHILE,
-
+  // Errors.
   ERROR,
   EoF
 };

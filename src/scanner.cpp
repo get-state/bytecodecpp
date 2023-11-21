@@ -2,12 +2,9 @@
 #include <cctype>
 #include <iostream>
 
-Scanner::Scanner(std::string_view const source) : source{source} {
+Scanner::Scanner(std::string_view const source) : source{source} {}
 
-}
-
-Scanner::Scanner(std::string const source) : source{source} {
-}
+Scanner::Scanner(std::string const source) : source{source} {}
 
 bool Scanner::isAtEnd() { return this->source[current] == '\0'; }
 
@@ -86,11 +83,14 @@ TokenType Scanner::identifierType() {
     return checkKeyword(1, 3, "lse", TokenType::ELSE);
   case 'f':
     if (this->current - this->start > 1) {
-	    switch (this->source[this->start+1]){
-		    case 'a' : return checkKeyword(2,3,"lse", TokenType::FALSE);
-		    case 'o' : return checkKeyword(2,1,"r", TokenType::FOR);
-		    case 'u' : return checkKeyword(2,1,"n", TokenType::FUN);
-	    }
+      switch (this->source[this->start + 1]) {
+      case 'a':
+        return checkKeyword(2, 3, "lse", TokenType::FALSE);
+      case 'o':
+        return checkKeyword(2, 1, "r", TokenType::FOR);
+      case 'u':
+        return checkKeyword(2, 1, "n", TokenType::FUN);
+      }
     }
     break;
   case 'i':
@@ -105,6 +105,16 @@ TokenType Scanner::identifierType() {
     return checkKeyword(1, 5, "eturn", TokenType::RETURN);
   case 's':
     return checkKeyword(1, 4, "uper", TokenType::SUPER);
+  case 't':
+    if (this->current - this->start > 1) {
+      switch (this->source.at(1)) {
+      case 'h':
+        return checkKeyword(2, 2, "is", TokenType::THIS);
+      case 'r':
+        return checkKeyword(2, 2, "ue", TokenType::TRUE);
+      }
+    }
+    break;
   case 'v':
     return checkKeyword(1, 2, "ar", TokenType::VAR);
   case 'w':

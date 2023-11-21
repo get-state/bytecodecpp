@@ -7,6 +7,9 @@
 
 typedef enum {
   OP_CONSTANT,
+  OP_NIL,
+  OP_TRUE,
+  OP_FALSE,
   OP_NEGATE,
   OP_ADD,
   OP_SUBTRACT,
@@ -35,7 +38,7 @@ public:
   [[nodiscard]] size_t getCount() const { return this->count; } 
 
   // returns a chunk at the specified offset
-  [[nodiscard]] size_t getAtOffset(size_t offset) const { return this->v[offset]; }
+  [[nodiscard]] size_t getAtOffset(size_t offset) const { return this->v.at(offset); }
 
   // returns a constant at the specified offset
   [[nodiscard]] Value getConstantValue(uint8_t offset) { return constants.at(offset); }
@@ -48,7 +51,7 @@ private:
   std::vector<std::uint8_t> v {};
   size_t count {0};
   ValueArray constants {};
-  std::vector<int> lines {};
+  std::vector<size_t> lines {};
   /* data */
 };
 #endif /* ifndef clox_chunk_h */

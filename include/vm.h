@@ -21,20 +21,22 @@ private:
   /* data */
   Chunk chunk;
   size_t ip; // instruction pointer
-  std::stack<Value> stack = {};
+  std::vector<Value> stack = {};
 
   /* methods */
-  [[nodiscard]] InterpretResult run();
+  InterpretResult run();
 
-  std::stack<Value> getStack() { return this->stack; }
+  std::vector<Value> getVStack() { return this->stack; }
 
-  void push(Value constant) { this->stack.push(constant); }
+  void push(Value constant) { this->stack.push_back(constant); }
 
   Value pop() {
-    Value tmp = this->stack.top();
-    this->stack.pop();
+    Value tmp = this->stack.back();
+    this->stack.pop_back();
     return tmp;
   }
+
+  Value peek(int distance) { return this->stack.at(stack.size() - 1 - distance); }
 };
 
 #endif // ifndef clox_vm_h

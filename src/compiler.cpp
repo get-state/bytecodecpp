@@ -111,7 +111,7 @@ void Compiler::parsePrecedence(Precedence precedence) {
 }
 
 Compiler::ParseRule Compiler::getRule(TokenType type) {
-  Compiler::ParseRule p = *(&this->rules[static_cast<int>(type)]);
+  Compiler::ParseRule p = *(&this->rules.at(static_cast<int>(type)));
   return p;
 }
 
@@ -124,8 +124,8 @@ void Compiler::emitConstant(Value value) {
 }
 
 void Compiler::number() {
-  Value value = std::stoi(this->parser.getPrevious().token.data());
-  emitConstant(value);
+  double value = std::stoi(this->parser.getPrevious().token.data());
+  emitConstant(Value(value));
 }
 
 void Compiler::binary() {
@@ -152,9 +152,26 @@ void Compiler::binary() {
   }
 }
 
+void Compiler::literal() {
+  switch (this->parser.getPrevious().type) {
+  case TokenType::FALSE:
+    emitByte(OP_FALSE);
+    break;
+  case TokenType::TRUE:
+    emitByte(OP_TRUE);
+    break;
+  case TokenType::NIL:
+    emitByte(OP_NIL);
+    break;
+  default:
+    throw std::logic_error(
+        "Invalid opCode passed to Compiler::literal()"); // unreachable
+  }
+}
 // Creates the parse table rules
-std::array<Compiler::ParseRule, TokenTypeCardinality()> Compiler::buildParseTable() {
-  std::array<Compiler::ParseRule, TokenTypeCardinality()> tmp;
+std::array<Compiler::ParseRule, TokenTypeCardinality()>
+Compiler::buildParseTable() {
+  std::array<Compiler::ParseRule, TokenTypeCardinality()> tmp {};
 
   /* Compiling Expressions rules < Calls and Functions infix-left-paren
         [TOKEN_LEFT_PAREN]    = {grouping, NULL,   PREC_NONE},
@@ -260,7 +277,7 @@ std::array<Compiler::ParseRule, TokenTypeCardinality()> Compiler::buildParseTabl
   */
   //> Types of Values table-false
   tmp.at(static_cast<int>(TokenType::FALSE)) = {&Compiler::literal, NULL,
-                                          Precedence::NONE},
+                                                Precedence::NONE};
   //< Types of Values table-false
   tmp.at(static_cast<int>(TokenType::FOR)) = {NULL, NULL, Precedence::NONE};
   tmp.at(static_cast<int>(TokenType::FUN)) = {NULL, NULL, Precedence::NONE};
@@ -270,8 +287,8 @@ std::array<Compiler::ParseRule, TokenTypeCardinality()> Compiler::buildParseTabl
     Precedence::NONE},
   */
   //> Types of Values table-nil
-  /* [static_cast<int>(TokenType::NIL)] = {&Compiler::literal, NULL, */
-  /*                                       Precedence::NONE}, */
+  tmp.at(static_cast<int>(TokenType::NIL)) = {&Compiler::literal, NULL,
+                                              Precedence::NONE};
   //< Types of Values table-nil
   /* Compiling Expressions rules < Jumping Back and Forth table-or
     [static_cast<int>(TokenType::OR)]            = {NULL,     NULL,
@@ -304,8 +321,8 @@ std::array<Compiler::ParseRule, TokenTypeCardinality()> Compiler::buildParseTabl
     Precedence::NONE},
   */
   //> Types of Values table-true
-  /* [static_cast<int>(TokenType::TRUE)] = {&Compiler::literal, NULL, */
-  /*                                        Precedence::NONE}, */
+  tmp.at(static_cast<int>(TokenType::TRUE)) = {&Compiler::literal, NULL,
+                                               Precedence::NONE};
   //< Types of Values table-true
   tmp.at(static_cast<int>(TokenType::VAR)) = {NULL, NULL, Precedence::NONE};
   tmp.at(static_cast<int>(TokenType::WHILE)) = {NULL, NULL, Precedence::NONE};
