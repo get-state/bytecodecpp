@@ -63,7 +63,7 @@ void Scanner::skipWhitespace() {
     }
   }
 }
-
+// start, len, rest (of string), TokenType
 TokenType Scanner::checkKeyword(size_t start, size_t length,
                                 std::string_view rest, TokenType type) {
   auto tmp = this->source.substr(this->start + start, length);
@@ -107,7 +107,7 @@ TokenType Scanner::identifierType() {
     return checkKeyword(1, 4, "uper", TokenType::SUPER);
   case 't':
     if (this->current - this->start > 1) {
-      switch (this->source.at(1)) {
+      switch (this->source.at(this->start + 1)) {
       case 'h':
         return checkKeyword(2, 2, "is", TokenType::THIS);
       case 'r':
