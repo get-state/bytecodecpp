@@ -1,6 +1,5 @@
 #include "value.h"
 #include <iostream>
-#include <variant>
 
 namespace value {
 double _asNumber(Value value) {
@@ -21,6 +20,10 @@ bool isNumber(Value value) {
 
 bool isBool(Value value) {
   return value.index() == static_cast<int>(ValueType::BOOL);
+}
+
+bool isFalsey(Value value) {
+  return isNill(value) || (isBool(value) && !asBool(value));
 }
 
 void printValue(Value value) {

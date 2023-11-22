@@ -1,4 +1,3 @@
-#include "chunk.h"
 #include "debug.h"
 #include "vm.h"
 #include <cstdlib>
@@ -6,8 +5,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <stdexcept>
-#include <streambuf>
 #include <string>
 
 #define PROJECT_NAME "bcpplox"

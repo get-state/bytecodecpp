@@ -28,6 +28,8 @@ bool isNill(Value value);
 
 void printValue(Value value);
 
+bool isFalsey(Value value);
+
 } // namespace value
 
 /* #define AS_NUMBER(value) \ */

@@ -82,6 +82,10 @@ InterpretResult VM::run() {
     case OP_FALSE:
       this->push(Value(std::in_place_index<VALUECAST(ValueType::BOOL)>, false));
       break;
+    case OP_NOT:
+      this->push(Value(std::in_place_index<VALUECAST(ValueType::BOOL)>,
+                       value::isFalsey(this->pop())));
+      break;
     }
   }
 #undef READ_CONSTANT

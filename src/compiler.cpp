@@ -88,6 +88,9 @@ void Compiler::unary() {
   case TokenType::MINUS:
     emitByte(OP_NEGATE);
     break;
+  case TokenType::BANG:
+    emitByte(OP_NOT);
+    break;
   default:
     break;
   }

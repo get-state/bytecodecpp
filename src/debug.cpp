@@ -59,6 +59,8 @@ int disassembleInstruction(Chunk &chunk, size_t offset) {
     return simpleInstruction("OP_FALSE", offset);
   case OP_NIL:
     return simpleInstruction("OP_NIL", offset);
+  case OP_NOT:
+    return simpleInstruction("OP_NOT", offset);
 
   default:
     std::cout << "unknown opcode " << instruction << std::endl;
