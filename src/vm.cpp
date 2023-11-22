@@ -21,7 +21,7 @@ InterpretResult VM::run() {
                                             //
 #define BINARY_OP(vType, op)                                                   \
   do {                                                                         \
-    if (!value::isNumber(this->peek(0)) || !value::isNumber(this->peek(1))) {   \
+    if (!value::isNumber(this->peek(0)) || !value::isNumber(this->peek(1))) {  \
       throw std::runtime_error("Operands must be numbers.");                   \
     }                                                                          \
     double b = value::_asNumber(this->pop());                                  \
@@ -40,9 +40,7 @@ InterpretResult VM::run() {
       std::cout << " ]";
     }
     std::cout << std::endl;
-    disassembleInstruction(
-        this->chunk,
-        static_cast<size_t>(this->ip));
+    disassembleInstruction(this->chunk, static_cast<size_t>(this->ip));
 #endif
     uint8_t instruction;
     switch (instruction = this->chunk.getAtOffset(this->ip++)) {

@@ -64,21 +64,20 @@ constexpr int TokenTypeCardinality(){
 
 typedef struct {
   TokenType type;
-  std::string_view token;
+  std::string token;
   int line;
 } Token;
 
 class Scanner {
 public:
   Scanner() = delete;
-  explicit Scanner(std::string_view const source);
-  explicit Scanner(std::string const source);
+  explicit Scanner(std::string const& source);
 
   Token scanToken();
 
 private:
   /* data */
-  std::string_view const source;
+  std::string const &source;
   std::string_view currentToken;
   size_t start{0};
   size_t current{0};

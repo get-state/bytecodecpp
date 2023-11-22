@@ -142,7 +142,7 @@ void Compiler::binary() {
     emitByte(OP_SUBTRACT);
     break;
   case TokenType::STAR:
-    emitByte(OP_SUBTRACT);
+    emitByte(OP_MULTIPLY);
     break;
   case TokenType::SLASH:
     emitByte(OP_DIVIDE);
@@ -171,7 +171,7 @@ void Compiler::literal() {
 // Creates the parse table rules
 std::array<Compiler::ParseRule, TokenTypeCardinality()>
 Compiler::buildParseTable() {
-  std::array<Compiler::ParseRule, TokenTypeCardinality()> tmp {};
+  std::array<Compiler::ParseRule, TokenTypeCardinality()> tmp{};
 
   /* Compiling Expressions rules < Calls and Functions infix-left-paren
         [TOKEN_LEFT_PAREN]    = {grouping, NULL,   PREC_NONE},
@@ -332,7 +332,7 @@ Compiler::buildParseTable() {
 }
 
 Compiler::Compiler(std::string const &source, Chunk &chunk)
-    : parser{Parser()}, scanner{Scanner(source)}, chunk{chunk} {
+    : parser{Parser()}, scanner{source}, chunk{chunk} {
   this->rules = this->buildParseTable();
   this->advance();
   this->expression();

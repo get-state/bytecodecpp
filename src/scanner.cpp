@@ -2,29 +2,27 @@
 #include <cctype>
 #include <iostream>
 
-Scanner::Scanner(std::string_view const source) : source{source} {}
+Scanner::Scanner(std::string const &source) : source{source} {}
 
-Scanner::Scanner(std::string const source) : source{source} {}
-
-bool Scanner::isAtEnd() { return this->source[current] == '\0'; }
+bool Scanner::isAtEnd() { return this->source[this->current] == '\0'; }
 
 char Scanner::advance() {
   ++this->current;
-  return this->source[current - 1];
+  return this->source[this->current - 1];
 }
 
-char Scanner::peek() { return this->source[current]; }
+char Scanner::peek() { return this->source[this->current]; }
 
 char Scanner::peekNext() {
   if (isAtEnd())
     return '\0';
-  return this->source[current + 1];
+  return this->source[this->current + 1];
 }
 
 bool Scanner::match(char expected) {
   if (isAtEnd())
     return false;
-  if (this->source[current] != expected)
+  if (this->source[this->current] != expected)
     return false;
   ++this->current;
   return true;
@@ -49,7 +47,7 @@ Token Scanner::errorToken(std::string const &message) {
 void Scanner::skipWhitespace() {
   for (;;) {
     const char c = peek();
-    if (isspace(c)) {
+    if (std::isspace(c)) {
       if (c == '\n')
         ++this->line;
       advance();
@@ -57,6 +55,8 @@ void Scanner::skipWhitespace() {
       if (peekNext() == '/') {
         while (peek() != '\n' && !isAtEnd())
           advance();
+      } else {
+        return;
       }
     } else {
       return;
