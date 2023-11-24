@@ -4,6 +4,7 @@
 #include "compiler.h"
 #include "debug.h"
 #include "value.h"
+#include <cmath>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -24,8 +25,8 @@ InterpretResult VM::run() {
     if (!value::isNumber(this->peek(0)) || !value::isNumber(this->peek(1))) {  \
       throw std::runtime_error("Operands must be numbers.");                   \
     }                                                                          \
-    double b = value::_asNumber(this->pop());                                  \
-    double a = value::_asNumber(this->pop());                                  \
+    double b = value::asNumber(this->pop());                                   \
+    double a = value::asNumber(this->pop());                                   \
     this->push(Value(std::in_place_index<static_cast<int>(vType)>, a op b));   \
   } while (false)
 
@@ -55,10 +56,10 @@ InterpretResult VM::run() {
       return INTERPRET_OK;
     }
     case OP_NEGATE: {
-      if (!value::_asNumber(this->peek(0))) {
+      if (!value::isNumber(this->peek(0))) {
         throw(std::runtime_error("Operand must be a number."));
       }
-      this->push(this->pop());
+      this->push(Value(-value::asNumber(this->pop())));
       break;
     }
     case OP_ADD:
@@ -79,6 +80,21 @@ InterpretResult VM::run() {
     case OP_TRUE:
       this->push(Value(std::in_place_index<VALUECAST(ValueType::BOOL)>, true));
       break;
+    case OP_GREATER: {
+      BINARY_OP(ValueType::BOOL, >);
+      break;
+    }
+    case OP_LESS: {
+      BINARY_OP(ValueType::BOOL, <);
+      break;
+    }
+    case OP_EQUAL: {
+      double a = value::asNumber(this->pop());
+      double b = value::asNumber(this->pop());
+      this->push(Value(std::in_place_index<VALUECAST(ValueType::BOOL)>,
+                       value::valuesEqual(a, b)));
+      break;
+    }
     case OP_FALSE:
       this->push(Value(std::in_place_index<VALUECAST(ValueType::BOOL)>, false));
       break;

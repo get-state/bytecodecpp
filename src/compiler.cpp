@@ -150,6 +150,25 @@ void Compiler::binary() {
   case TokenType::SLASH:
     emitByte(OP_DIVIDE);
     break;
+  case TokenType::BANG_EQUAL:
+    emitByte(OP_EQUAL, OP_NOT);
+    break;
+  case TokenType::EQUAL_EQUAL:
+    emitByte(OP_EQUAL);
+    break;
+  case TokenType::LESS:
+    emitByte(OP_LESS);
+    break;
+  case TokenType::GREATER:
+    emitByte(OP_GREATER);
+    break;
+  case TokenType::LESS_EQUAL:
+    emitByte(OP_GREATER, OP_NOT);
+    break;
+  case TokenType::GREATER_EQUAL:
+    emitByte(OP_LESS, OP_NOT);
+    break;
+
   default:
     return; // TODO: refactor to throw an error
   }
@@ -180,9 +199,8 @@ Compiler::buildParseTable() {
         [TOKEN_LEFT_PAREN]    = {grouping, NULL,   PREC_NONE},
       */
   //> Calls and Functions infix-left-paren
-  /* [static_cast<int>(TokenType::LEFT_PAREN)] = {&Compiler::grouping, */
-  /* &Compiler::call, */
-  /* Precedence::CALL}, */
+  tmp.at(static_cast<int>(TokenType::LEFT_PAREN)) = {
+      &Compiler::grouping, NULL, Precedence::NONE};
   //< Calls and Functions infix-left-paren
   tmp.at(static_cast<int>(TokenType::RIGHT_PAREN)) =
       ParseRule{.prefix = NULL, .infix = NULL, .precedence = Precedence::NONE};

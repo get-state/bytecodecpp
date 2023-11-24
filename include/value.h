@@ -18,7 +18,7 @@ typedef std::variant<bool, bool, double> Value;
 
 // Some helper functions
 namespace value {
-double _asNumber(Value value);
+double asNumber(Value value);
 
 bool isNumber(Value value);
 
@@ -29,6 +29,8 @@ bool isNill(Value value);
 void printValue(Value value);
 
 bool isFalsey(Value value);
+
+bool valuesEqual(Value a, Value b);
 
 } // namespace value
 
