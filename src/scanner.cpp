@@ -197,7 +197,7 @@ Token Scanner::scanToken() {
   case '*':
     return makeToken(TokenType::STAR);
   case '!':
-    return makeToken(match('!') ? TokenType::BANG_EQUAL : TokenType::BANG);
+    return makeToken(match('=') ? TokenType::BANG_EQUAL : TokenType::BANG);
   case '=':
     return makeToken(match('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL);
   case '<':
