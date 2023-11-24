@@ -11,8 +11,8 @@
 
 static void repl() {
   std::string line;
-  VM vm;
   for (;;) {
+    VM vm;
     std::cout << "> ";
     std::getline(std::cin, line);
     vm.interpret(line);
