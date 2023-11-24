@@ -33,11 +33,9 @@ InterpretResult VM::run() {
   for (;;) {
 #ifdef DEBUG_TRACE_EXECUTION
     std::cout << "\t";
-    auto vStackCopy = this->getVStack(); // this is not a stack, but a vector.
-    while (!vStackCopy.empty()) {
+    for (auto byteCode : this->stack) {
       std::cout << "[ ";
-      value::printValue(vStackCopy.back());
-      vStackCopy.pop_back();
+      value::printValue(byteCode);
       std::cout << " ]";
     }
     std::cout << std::endl;
