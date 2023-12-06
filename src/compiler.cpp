@@ -1,5 +1,6 @@
 #include "compiler.h"
 #include "scanner.h"
+#include "value.h"
 #include <cstdint>
 #include <functional>
 #include <iostream>
@@ -35,8 +36,7 @@ void Compiler::errorAt(Token token, std::string_view message) {
 void Compiler::advance() {
   this->parser.setPrevious(this->parser.getCurrent());
 
-  for (;;) {
-    this->parser.setCurrent(this->scanner.scanToken());
+  for (;;) { this->parser.setCurrent(this->scanner.scanToken());
     if (parser.getCurrent().type != TokenType::ERROR) {
       break;
     }
@@ -64,6 +64,7 @@ void Compiler::emitByte(std::uint8_t byte, std::uint8_t byte2) {
 
 void Compiler::emitReturn() { emitByte(OP_RETURN); }
 
+// Returns the offset
 uint8_t Compiler::makeConstant(Value value) {
   int offset = this->chunk.addConstant(value);
   if (offset > UINT8_MAX) {
@@ -98,7 +99,8 @@ void Compiler::unary() {
 
 void Compiler::parsePrecedence(Precedence precedence) {
   this->advance();
-  Compiler::ParseFn prefixRule = getRule(parser.getPrevious().type).prefix;
+  Token tmp = parser.getPrevious();
+  Compiler::ParseFn prefixRule = getRule(tmp.type).prefix;
   if (prefixRule == NULL) {
     error("Expect expression");
     return;
@@ -129,6 +131,16 @@ void Compiler::emitConstant(Value value) {
 void Compiler::number() {
   double value = std::stoi(this->parser.getPrevious().token.data());
   emitConstant(Value(value));
+}
+
+std::shared_ptr<std::string> Compiler::copyString(Token token) {
+  std::shared_ptr<std::string> tmp = std::make_shared<std::string>(token.token);
+  std::cout << "token: " << token.token << std::endl;
+  return tmp;
+}
+
+void Compiler::string() {
+  emitConstant(Value(this->copyString(this->parser.getPrevious())));
 }
 
 void Compiler::binary() {
@@ -199,8 +211,8 @@ Compiler::buildParseTable() {
         [TOKEN_LEFT_PAREN]    = {grouping, NULL,   PREC_NONE},
       */
   //> Calls and Functions infix-left-paren
-  tmp.at(static_cast<int>(TokenType::LEFT_PAREN)) = {
-      &Compiler::grouping, NULL, Precedence::NONE};
+  tmp.at(static_cast<int>(TokenType::LEFT_PAREN)) = {&Compiler::grouping, NULL,
+                                                     Precedence::NONE};
   //< Calls and Functions infix-left-paren
   tmp.at(static_cast<int>(TokenType::RIGHT_PAREN)) =
       ParseRule{.prefix = NULL, .infix = NULL, .precedence = Precedence::NONE};
@@ -277,8 +289,8 @@ Compiler::buildParseTable() {
     Precedence::NONE},
   */
   //> Strings table-string
-  /* [static_cast<int>(TokenType::STRING)] = {&Compiler::string, NULL, */
-  /*                                          Precedence::NONE}, */
+  tmp.at(static_cast<int>(TokenType::STRING)) = {&Compiler::string, NULL,
+                                                 Precedence::NONE};
   //< Strings table-string
   tmp.at(static_cast<int>(TokenType::NUMBER)) = {&Compiler::number, NULL,
                                                  Precedence::NONE};
@@ -355,7 +367,7 @@ Compiler::buildParseTable() {
 Compiler::Compiler(std::string const &source, Chunk &chunk)
     : parser{Parser()}, scanner{source}, chunk{chunk} {
   this->rules = this->buildParseTable();
-  this->advance();
+  this->advance(); // initial setup parser.
   this->expression();
   consume(TokenType::EoF, "Expected end of expression.");
   this->emitReturn();

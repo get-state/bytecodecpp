@@ -3,8 +3,8 @@
 #include "chunk.h"
 #include "scanner.h"
 #include <cstdint>
-#include <functional>
 #include <memory>
+#include <array>
 #include <string>
 
 // A small class to hold the current and previous tokens. Managed by the
@@ -20,9 +20,9 @@ public:
   Parser(Token current, Token previous)
       : current{current}, previous{previous} {}
 
-  [[nodiscard]] Token getPrevious() { return this->previous; }
+  [[nodiscard]] Token const getPrevious() { return this->previous; }
 
-  [[nodiscard]] Token getCurrent() { return this->current; }
+  [[nodiscard]] Token const getCurrent() { return this->current; }
 
   void setPrevious(Token prev) { this->previous = prev; }
 
@@ -104,6 +104,10 @@ private:
   void unary();
 
   void literal();
+  
+  void string();
+  
+  std::shared_ptr<std::string> copyString(Token token);
 
   void parsePrecedence(Precedence precedence);
 

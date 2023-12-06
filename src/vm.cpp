@@ -4,11 +4,15 @@
 #include "compiler.h"
 #include "debug.h"
 #include "value.h"
-#include <cmath>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <utility>
+
+/* void VM::concatenate(){ */
+	
+/* } */
+
 
 // TODO implement runtimeerror, to show where the error is.
 //
@@ -61,6 +65,15 @@ InterpretResult VM::run() {
       break;
     }
     case OP_ADD:
+      if (value::isString(this->peek(0)) && value::isString(this->peek(1))) {
+        /* concatenate(); */
+      } else if (value::isNumber(this->peek(0)) &&
+                 value::isNumber(this->peek(1))) {
+        double b = value::asNumber(this->pop());
+        double a = value::asNumber(this->pop());
+        this->push(Value(std::in_place_index<static_cast<int>(ValueType::NUMBER)>, a + b));
+      }
+
       BINARY_OP(ValueType::NUMBER, +);
       break;
     case OP_SUBTRACT:
@@ -87,8 +100,8 @@ InterpretResult VM::run() {
       break;
     }
     case OP_EQUAL: {
-      double a = value::asNumber(this->pop());
-      double b = value::asNumber(this->pop());
+      Value a = this->pop();
+      Value b = this->pop();
       this->push(Value(std::in_place_index<VALUECAST(ValueType::BOOL)>,
                        value::valuesEqual(a, b)));
       break;

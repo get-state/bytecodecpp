@@ -1,6 +1,7 @@
 #include "value.h"
 #include <iostream>
 #include <stdexcept>
+#include <variant>
 
 namespace value {
 double asNumber(Value value) {
@@ -20,12 +21,18 @@ bool asBool(Value value) {
   return std::get<static_cast<int>(ValueType::BOOL)>(value);
 }
 
+std::string asString(Value value) {
+  return *std::get<static_cast<int>(ValueType::STRING)>(value);
+}
+
 bool isNill(Value value) {
   return value.index() == static_cast<int>(ValueType::NIL);
 }
 
-bool isNumber(Value value) {
-  return value.index() == static_cast<int>(ValueType::NUMBER);
+bool isNumber(Value value) { return std::holds_alternative<double>(value); }
+
+bool isString(Value value) {
+  return std::holds_alternative<std::shared_ptr<std::string>>(value);
 }
 
 bool isBool(Value value) {
@@ -34,6 +41,12 @@ bool isBool(Value value) {
 
 bool isFalsey(Value value) {
   return isNill(value) || (isBool(value) && !asBool(value));
+}
+
+void printStringObj(Value value) {
+  std::shared_ptr<std::string> tmp =
+      std::get<static_cast<int>(ValueType::STRING)>(value);
+  std::cout << *tmp << " //string";
 }
 
 bool valuesEqual(Value a, Value b) {
@@ -47,6 +60,8 @@ bool valuesEqual(Value a, Value b) {
     return asNumber(a) == asNumber(b);
   case static_cast<int>(ValueType::NIL):
     return true;
+  case static_cast<int>(ValueType::STRING):
+    return asString(a) == asString(b);
   default:
     throw std::logic_error("Invalid value type");
   }
@@ -62,6 +77,9 @@ void printValue(Value value) {
     break;
   case VALUECAST(ValueType::NIL):
     std::cout << "nil";
+    break;
+  case VALUECAST(ValueType::STRING):
+    value::printStringObj(value);
     break;
   }
 }

@@ -1,19 +1,24 @@
 #ifndef clox_value_h
 #define clox_value_h
 
+#include <memory>
+#include <string>
 #include <variant>
 #include <vector>
 
 #define VALUECAST(x) static_cast<int>(x)
 
 enum class ValueType {
+  // primatives
   BOOL,
   NIL,
   NUMBER,
+  //objects
+  STRING,
 };
 
 // a variant holding the possible cLox values. Indexed by the ValueType enum.
-typedef std::variant<bool, bool, double> Value;
+typedef std::variant<bool, bool, double, std::shared_ptr<std::string>> Value;
 
 
 // Some helper functions
@@ -25,6 +30,8 @@ bool isNumber(Value value);
 bool isBool(Value value);
 
 bool isNill(Value value);
+
+bool isString(Value value);
 
 void printValue(Value value);
 

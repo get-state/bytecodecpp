@@ -1,6 +1,5 @@
 #include "scanner.h"
 #include <cctype>
-#include <iostream>
 
 Scanner::Scanner(std::string const &source) : source{source} {}
 

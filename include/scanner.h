@@ -58,8 +58,8 @@ enum class TokenType {
 };
 
 // returns the total amount of TokenTypes in the enum class.
-constexpr int TokenTypeCardinality(){
-	return static_cast<int>(TokenType::EoF) + 1;
+constexpr int TokenTypeCardinality() {
+  return static_cast<int>(TokenType::EoF) + 1;
 }
 
 typedef struct {
@@ -71,7 +71,7 @@ typedef struct {
 class Scanner {
 public:
   Scanner() = delete;
-  explicit Scanner(std::string const& source);
+  explicit Scanner(std::string const &source);
 
   Token scanToken();
 
