@@ -124,8 +124,11 @@ std::array<ParseRule, TokenTypeCardinality()> buildParseTable();
   Chunk &chunk;
 
   // Parse table
-  std::array<ParseRule, TokenTypeCardinality()> rules = {
-      ParseRule{.prefix = NULL, .infix = NULL, .precedence = Precedence::NONE}};
+  /* std::array<ParseRule, TokenTypeCardinality()> rules = { */
+  /*     ParseRule{.prefix = NULL, .infix = NULL, .precedence = Precedence::NONE}}; */
+
+  const std::array<ParseRule, TokenTypeCardinality()> rules = buildParseTable();
+
 };
 
 #endif /* ifndef clox_compiler_h */

@@ -37,6 +37,8 @@ private:
   }
 
   Value peek(int distance) { return this->stack.at(stack.size() - 1 - distance); }
+  
+  void concatenate();
 };
 
 #endif // ifndef clox_vm_h

@@ -46,7 +46,7 @@ bool isFalsey(Value value) {
 void printStringObj(Value value) {
   std::shared_ptr<std::string> tmp =
       std::get<static_cast<int>(ValueType::STRING)>(value);
-  std::cout << *tmp << " //string";
+  std::cout << "string: " << '"' << *tmp << '"';
 }
 
 bool valuesEqual(Value a, Value b) {

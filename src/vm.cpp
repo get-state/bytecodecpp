@@ -9,10 +9,12 @@
 #include <string>
 #include <utility>
 
-/* void VM::concatenate(){ */
-	
-/* } */
-
+void VM::concatenate() {
+  auto a = std::get<VALUECAST(ValueType::STRING)>(this->pop());
+  auto b = std::get<VALUECAST(ValueType::STRING)>(this->pop());
+  *a = *b + *a;
+  this->push(Value(a));
+}
 
 // TODO implement runtimeerror, to show where the error is.
 //
@@ -66,15 +68,16 @@ InterpretResult VM::run() {
     }
     case OP_ADD:
       if (value::isString(this->peek(0)) && value::isString(this->peek(1))) {
-        /* concatenate(); */
+        concatenate();
       } else if (value::isNumber(this->peek(0)) &&
                  value::isNumber(this->peek(1))) {
         double b = value::asNumber(this->pop());
         double a = value::asNumber(this->pop());
-        this->push(Value(std::in_place_index<static_cast<int>(ValueType::NUMBER)>, a + b));
+        this->push(Value(
+            std::in_place_index<static_cast<int>(ValueType::NUMBER)>, a + b));
+      } else {
+        throw(std::runtime_error("Operand must be a number."));
       }
-
-      BINARY_OP(ValueType::NUMBER, +);
       break;
     case OP_SUBTRACT:
       BINARY_OP(ValueType::NUMBER, -);
@@ -120,13 +123,11 @@ InterpretResult VM::run() {
 }
 
 InterpretResult VM::interpret(std::string const &source) {
-  Chunk chunk;
   try {
-    Compiler compile(source, chunk);
+    Compiler compile(source, this->chunk);
   } catch (std::logic_error const &) { // TODO: make own error class. We do not
     return INTERPRET_COMPILE_ERROR;
   }
-  this->chunk = chunk;
   this->ip = 0;
   try {
     run();

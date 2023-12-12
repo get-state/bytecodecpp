@@ -134,9 +134,14 @@ void Compiler::number() {
 }
 
 std::shared_ptr<std::string> Compiler::copyString(Token token) {
-  std::shared_ptr<std::string> tmp = std::make_shared<std::string>(token.token);
-  std::cout << "token: " << token.token << std::endl;
-  return tmp;
+  if (token.token != ""){
+  	auto tmp = std::make_shared<std::string>(token.token.substr(1,token.token.size()-2));
+  	return tmp;
+  }
+  else{
+  	auto tmp = std::make_shared<std::string>("");
+  	return tmp;
+  }
 }
 
 void Compiler::string() {
@@ -202,6 +207,7 @@ void Compiler::literal() {
         "Invalid opCode passed to Compiler::literal()"); // unreachable
   }
 }
+
 // Creates the parse table rules
 std::array<Compiler::ParseRule, TokenTypeCardinality()>
 Compiler::buildParseTable() {
@@ -364,9 +370,10 @@ Compiler::buildParseTable() {
   return tmp;
 }
 
+
 Compiler::Compiler(std::string const &source, Chunk &chunk)
     : parser{Parser()}, scanner{source}, chunk{chunk} {
-  this->rules = this->buildParseTable();
+  /* this->rules = this->buildParseTable(); */
   this->advance(); // initial setup parser.
   this->expression();
   consume(TokenType::EoF, "Expected end of expression.");
