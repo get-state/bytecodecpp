@@ -4,16 +4,17 @@
 #include "compiler.h"
 #include "debug.h"
 #include "value.h"
+#include "object.h"
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <utility>
 
 void VM::concatenate() {
-  auto a = std::get<VALUECAST(ValueType::STRING)>(this->pop());
-  auto b = std::get<VALUECAST(ValueType::STRING)>(this->pop());
-  *a = *b + *a;
-  this->push(Value(a));
+  cloxString a = std::get<VALUECAST(ValueType::STRING)>(this->pop());
+  cloxString b = std::get<VALUECAST(ValueType::STRING)>(this->pop());
+  cloxString str = b.getStr() + a.getStr();
+  this->push(Value(str));
 }
 
 // TODO implement runtimeerror, to show where the error is.

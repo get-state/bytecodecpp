@@ -2,7 +2,6 @@
 #define clox_vm_h
 
 #include "chunk.h"
-#include <stack>
 #include <string>
 
 typedef enum {
@@ -22,6 +21,7 @@ private:
   Chunk chunk;
   size_t ip; // instruction pointer
   std::vector<Value> stack = {};
+  std::vector<cloxObj*> obj_ptrs = {}; // list to all (heap) allocated objects.
 
   /* methods */
   InterpretResult run();

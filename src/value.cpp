@@ -22,7 +22,7 @@ bool asBool(Value value) {
 }
 
 std::string asString(Value value) {
-  return *std::get<static_cast<int>(ValueType::STRING)>(value);
+  return std::get<static_cast<int>(ValueType::STRING)>(value).getStr();
 }
 
 bool isNill(Value value) {
@@ -32,7 +32,7 @@ bool isNill(Value value) {
 bool isNumber(Value value) { return std::holds_alternative<double>(value); }
 
 bool isString(Value value) {
-  return std::holds_alternative<std::shared_ptr<std::string>>(value);
+  return std::holds_alternative<cloxString>(value);
 }
 
 bool isBool(Value value) {
@@ -44,9 +44,9 @@ bool isFalsey(Value value) {
 }
 
 void printStringObj(Value value) {
-  std::shared_ptr<std::string> tmp =
+  auto tmp =
       std::get<static_cast<int>(ValueType::STRING)>(value);
-  std::cout << "string: " << '"' << *tmp << '"';
+  std::cout << "string: " << '"' << tmp.getStr() << '"';
 }
 
 bool valuesEqual(Value a, Value b) {

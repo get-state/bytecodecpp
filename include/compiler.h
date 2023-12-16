@@ -107,7 +107,7 @@ private:
   
   void string();
   
-  std::shared_ptr<std::string> copyString(Token token);
+  std::string copyString(Token const& token);
 
   void parsePrecedence(Precedence precedence);
 

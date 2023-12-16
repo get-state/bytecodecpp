@@ -1,8 +1,7 @@
 #ifndef clox_value_h
 #define clox_value_h
 
-#include <memory>
-#include <string>
+#include "object.h"
 #include <variant>
 #include <vector>
 
@@ -18,7 +17,7 @@ enum class ValueType {
 };
 
 // a variant holding the possible cLox values. Indexed by the ValueType enum.
-typedef std::variant<bool, bool, double, std::shared_ptr<std::string>> Value;
+typedef std::variant<bool, bool, double, cloxString> Value;
 
 
 // Some helper functions

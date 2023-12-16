@@ -1,6 +1,7 @@
 #include "compiler.h"
 #include "scanner.h"
 #include "value.h"
+#include "object.h"
 #include <cstdint>
 #include <functional>
 #include <iostream>
@@ -133,19 +134,19 @@ void Compiler::number() {
   emitConstant(Value(value));
 }
 
-std::shared_ptr<std::string> Compiler::copyString(Token token) {
+std::string Compiler::copyString(Token const& token) {
   if (token.token != ""){
-  	auto tmp = std::make_shared<std::string>(token.token.substr(1,token.token.size()-2));
+  	auto tmp = std::string(token.token.substr(1,token.token.size()-2));
   	return tmp;
   }
   else{
-  	auto tmp = std::make_shared<std::string>("");
+  	auto tmp = std::string("");
   	return tmp;
   }
 }
 
 void Compiler::string() {
-  emitConstant(Value(this->copyString(this->parser.getPrevious())));
+  emitConstant(Value(cloxString((copyString(this->parser.getPrevious())))));
 }
 
 void Compiler::binary() {
