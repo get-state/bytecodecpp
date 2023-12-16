@@ -26,7 +26,7 @@ public:
 
   cloxString(std::string s) { data = new std::string(s); }
 
-  cloxString(const cloxString &cloxStr) { data = cloxStr.data; }
+  cloxString(const cloxString &cloxStr) { data = new std::string(*cloxStr.data); }
 
   cloxString(cloxString &&cloxStr) {
     data = cloxStr.data;
